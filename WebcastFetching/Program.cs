@@ -13,12 +13,14 @@ namespace WebcastFetching
         {
             string DestPath = String.Empty, 
                 m3u8Src = String.Empty;
+            bool WaitToExit = false;
 
             switch (args.Count())
             {
                 case 0:
                     string input;
                     bool vaildflag;
+                    WaitToExit = true;
                     do
                     {
                         Console.WriteLine("Enter m3u8 web link:");
@@ -35,7 +37,7 @@ namespace WebcastFetching
                         else if ((input.Last() == '\\') || (input.Last() == '/'))    // Is directory
                         {
                             if (Directory.Exists(input))
-                                input += ('\\' + SrcHdl.GetLinkFileNamem3u8(m3u8Src));
+                                input += SrcHdl.GetLinkFileNamem3u8(m3u8Src);
                             else
                             {
                                 Console.WriteLine("Invaild path.");
@@ -47,7 +49,7 @@ namespace WebcastFetching
                         {
                             if (!(input.Contains('\\') || input.Contains('/')))
                             {
-                                input = Environment.CurrentDirectory + input;
+                                input = Environment.CurrentDirectory + '\\' + input;
                             }
                             else if (!Directory.Exists(input.Substring(0, input.LastIndexOf('\\'))))
                             {
@@ -84,7 +86,7 @@ namespace WebcastFetching
                     if ((args[1].Last() == '\\') || (args[1].Last() == '/'))    // Is directory
                     {
                         if (Directory.Exists(args[1]))
-                            DestPath = args[1] + '\\' + SrcHdl.GetLinkFileNamem3u8(m3u8Src);
+                            DestPath = args[1] + SrcHdl.GetLinkFileNamem3u8(m3u8Src);
                         else
                         {
                             Console.WriteLine("Invaild path.");
@@ -96,7 +98,7 @@ namespace WebcastFetching
                     {
                         if (!(args[1].Contains('\\') || args[1].Contains('/')))
                         {
-                            DestPath = Environment.CurrentDirectory + args[1];
+                            DestPath = Environment.CurrentDirectory + '\\' + args[1];
                         }
                         else if (!Directory.Exists(args[1].Substring(0, args[1].LastIndexOf('\\'))))
                         {
@@ -133,7 +135,8 @@ namespace WebcastFetching
             Dest.Dispose();
             Console.WriteLine("Finished.");
             
-            Console.ReadKey();
+            if (WaitToExit)
+                Console.ReadKey();
         }
     }
 }
